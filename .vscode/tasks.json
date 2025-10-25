@@ -1,0 +1,75 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Frontend",
+            "type": "shell",
+            "command": "npm run serve",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "group": "dev-servers",
+                "panel": "dedicated",
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Start Backend",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\Activate.ps1; python app.py",
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "group": "dev-servers",
+                "panel": "dedicated",
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Start Celery Worker",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery worker --pool=solo -l info",
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "group": "dev-servers",
+                "panel": "dedicated",
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Start Celery Beat",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery beat -l info",
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "group": "dev-servers",
+                "panel": "dedicated",
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Start All Services",
+            "dependsOn": [
+                "Start Frontend",
+                "Start Backend",
+                "Start Celery Worker",
+                "Start Celery Beat"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

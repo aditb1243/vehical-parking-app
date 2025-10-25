@@ -1,0 +1,12 @@
+backend/__pycache__
+backend/wslenv
+frontend/node_modules
+frontend/package-lock.json
+backend/instance/parking_db.db
+backend/winenv
+backend/.venv
+backend/applications/__pycache__
+backend/tools/__pycache__
+backend/migrations/__pycache__
+.zencoder
+/.zencoder
