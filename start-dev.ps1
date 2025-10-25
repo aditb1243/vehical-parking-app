@@ -94,20 +94,20 @@ try {
     exit 1
 }
 
-# Step 3: Check and start Redis container
-Write-Host "`n[3/8] Setting up Redis..." -ForegroundColor Yellow
+# Step 3: Check and start Docker containers (Redis & MailHog)
+Write-Host "`n[3/8] Setting up Docker containers..." -ForegroundColor Yellow
 
-$redisRunning = docker ps --filter "name=redis" --filter "status=running" --format "{{.Names}}" | Select-String -Pattern "redis"
+# Check and start Redis
+$redisRunning = docker ps --filter "name=redis" --filter "status=running" --format "{{.Names}}" | Select-String -Pattern "^redis$"
 
 if ($redisRunning) {
     Write-Host "  ✅ Redis container is already running" -ForegroundColor Green
 } else {
-    # Check if container exists but is stopped
-    $redisExists = docker ps -a --filter "name=redis" --format "{{.Names}}" | Select-String -Pattern "redis"
+    $redisExists = docker ps -a --filter "name=redis" --format "{{.Names}}" | Select-String -Pattern "^redis$"
     
     if ($redisExists) {
         Write-Host "  ⚠️  Redis container exists but is stopped. Starting..." -ForegroundColor Yellow
-        docker start redis
+        docker start redis | Out-Null
         if ($LASTEXITCODE -eq 0) {
             Write-Host "  ✅ Redis container started" -ForegroundColor Green
         } else {
@@ -116,7 +116,7 @@ if ($redisRunning) {
         }
     } else {
         Write-Host "  ⚠️  Redis container not found. Pulling and starting..." -ForegroundColor Yellow
-        docker run -d --name redis -p 6379:6379 redis:latest
+        docker run -d --name redis -p 6379:6379 redis:latest | Out-Null
         if ($LASTEXITCODE -eq 0) {
             Write-Host "  ✅ Redis container pulled and started" -ForegroundColor Green
         } else {
@@ -125,6 +125,36 @@ if ($redisRunning) {
         }
     }
 }
+
+# Check and start MailHog
+$mailhogRunning = docker ps --filter "name=mailhog" --filter "status=running" --format "{{.Names}}" | Select-String -Pattern "^mailhog$"
+
+if ($mailhogRunning) {
+    Write-Host "  ✅ MailHog container is already running" -ForegroundColor Green
+} else {
+    $mailhogExists = docker ps -a --filter "name=mailhog" --format "{{.Names}}" | Select-String -Pattern "^mailhog$"
+    
+    if ($mailhogExists) {
+        Write-Host "  ⚠️  MailHog container exists but is stopped. Starting..." -ForegroundColor Yellow
+        docker start mailhog | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✅ MailHog container started" -ForegroundColor Green
+        } else {
+            Write-Host "  ❌ Failed to start MailHog container" -ForegroundColor Red
+            exit 1
+        }
+    } else {
+        Write-Host "  ⚠️  MailHog container not found. Pulling and starting..." -ForegroundColor Yellow
+        docker run -d --name mailhog -p 1025:1025 -p 8025:8025 mailhog/mailhog | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✅ MailHog container pulled and started" -ForegroundColor Green
+        } else {
+            Write-Host "  ❌ Failed to start MailHog container" -ForegroundColor Red
+            exit 1
+        }
+    }
+}
+
 Start-Sleep -Seconds 2
 
 # Step 4: Install Frontend Dependencies
@@ -167,7 +197,9 @@ if (-not $SkipInstall) {
     
     Set-Location $BACKEND_DIR
     
-    if (-not (Test-Path "venv")) {
+    $venvPath = Join-Path $BACKEND_DIR "venv"
+    
+    if (-not (Test-Path $venvPath)) {
         Write-Host "  📦 Creating Python virtual environment..." -ForegroundColor Cyan
         python -m venv venv
         if ($LASTEXITCODE -ne 0) {
@@ -175,21 +207,38 @@ if (-not $SkipInstall) {
             Set-Location $ROOT_DIR
             exit 1
         }
+        Write-Host "  ✅ Virtual environment created" -ForegroundColor Green
     }
     
-    if ($FirstRun -or -not (Test-Path "venv\Lib\site-packages\flask")) {
-        Write-Host "  📦 Installing Python packages..." -ForegroundColor Cyan
-        & "venv\Scripts\Activate.ps1"
-        python -m pip install --upgrade pip
+    # Always check if packages need to be installed
+    $flaskInstalled = Test-Path "venv\Lib\site-packages\flask"
+    
+    if ($FirstRun -or -not $flaskInstalled) {
+        Write-Host "  📦 Installing Python packages in virtual environment..." -ForegroundColor Cyan
+        
+        # Use full path to activate script
+        $activateScript = Join-Path $venvPath "Scripts\Activate.ps1"
+        
+        # Run pip install in the virtual environment
+        & $activateScript
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "  ❌ Failed to activate virtual environment" -ForegroundColor Red
+            Set-Location $ROOT_DIR
+            exit 1
+        }
+        
+        python -m pip install --upgrade pip | Out-Null
         pip install -r requirements.txt
+        
         if ($LASTEXITCODE -ne 0) {
             Write-Host "  ❌ Failed to install backend dependencies" -ForegroundColor Red
             deactivate
             Set-Location $ROOT_DIR
             exit 1
         }
+        
         deactivate
-        Write-Host "  ✅ Backend dependencies installed" -ForegroundColor Green
+        Write-Host "  ✅ Backend dependencies installed in venv" -ForegroundColor Green
     } else {
         Write-Host "  ✅ Backend dependencies already installed (use -FirstRun to reinstall)" -ForegroundColor Green
     }
@@ -203,6 +252,13 @@ if (-not $SkipInstall) {
 Write-Host "`n[6/8] Cleaning Celery Beat schedule files..." -ForegroundColor Yellow
 
 Set-Location $BACKEND_DIR
+
+# Ensure instance directory exists for SQLite database
+$instanceDir = Join-Path $BACKEND_DIR "instance"
+if (-not (Test-Path $instanceDir)) {
+    New-Item -ItemType Directory -Path $instanceDir | Out-Null
+    Write-Host "  ✅ Created instance directory for database" -ForegroundColor Green
+}
 
 $celeryFiles = @("celerybeat-schedule", "celerybeat-schedule-shm", "celerybeat-schedule-wal", "celerybeat-schedule.db")
 $cleanedFiles = 0
@@ -233,6 +289,8 @@ $ports = @{
     "5000" = "Flask Backend"
     "8080" = "Vue Frontend"
     "6379" = "Redis"
+    "1025" = "MailHog SMTP"
+    "8025" = "MailHog Web UI"
 }
 
 $portsInUse = @()
@@ -402,7 +460,7 @@ $tasksJson = @"
         {
             "label": "Start Backend",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; python app.py",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; python app.py",
             "options": {
                 "cwd": "`${workspaceFolder}/backend"
             },
@@ -417,7 +475,7 @@ $tasksJson = @"
         {
             "label": "Start Celery Worker",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery worker --pool=solo -l info",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; celery -A app.celery worker --pool=solo -l info",
             "options": {
                 "cwd": "`${workspaceFolder}/backend"
             },
@@ -432,7 +490,7 @@ $tasksJson = @"
         {
             "label": "Start Celery Beat",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery beat -l info",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; celery -A app.celery beat -l info",
             "options": {
                 "cwd": "`${workspaceFolder}/backend"
             },
@@ -488,7 +546,8 @@ Write-Host "  Terminal 4 (Celery B): " -ForegroundColor Cyan -NoNewline
 Write-Host "cd backend && .\venv\Scripts\Activate.ps1 && celery -A app.celery beat -l info" -ForegroundColor White
 Write-Host ""
 Write-Host "📱 Application URLs:" -ForegroundColor Cyan
-Write-Host "  Frontend:  http://localhost:8080" -ForegroundColor White
-Write-Host "  Backend:   http://localhost:5000" -ForegroundColor White
-Write-Host "  Redis:     localhost:6379" -ForegroundColor White
+Write-Host "  Frontend:    http://localhost:8080" -ForegroundColor White
+Write-Host "  Backend:     http://localhost:5000" -ForegroundColor White
+Write-Host "  MailHog UI:  http://localhost:8025" -ForegroundColor White
+Write-Host "  Redis:       localhost:6379" -ForegroundColor White
 Write-Host ""

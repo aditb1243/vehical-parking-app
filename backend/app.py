@@ -2,10 +2,14 @@ from applications import app, db, User
 from applications.models import *
 from faker import Faker # type: ignore
 import random
+import os
 from datetime import datetime, timedelta
 
 def create_admin():
     with app.app_context():
+        instance_path = os.path.join(os.path.dirname(__file__), 'instance')
+        os.makedirs(instance_path, exist_ok=True)
+        
         db.create_all()
         if not User.query.filter_by(admin=True).first():
             user = User(
@@ -20,7 +24,6 @@ def create_admin():
 
 create_admin()
 
-#Generating Random Data to store in the Database
 fake = Faker()
 
 def seed_dummy_data(num_users=5, num_locations=5, lots_per_location=2, spots_per_lot=10):

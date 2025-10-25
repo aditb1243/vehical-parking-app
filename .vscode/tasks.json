@@ -19,7 +19,7 @@
         {
             "label": "Start Backend",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; python app.py",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; python app.py",
             "options": {
                 "cwd": "${workspaceFolder}/backend"
             },
@@ -34,7 +34,7 @@
         {
             "label": "Start Celery Worker",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery worker --pool=solo -l info",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; celery -A app.celery worker --pool=solo -l info",
             "options": {
                 "cwd": "${workspaceFolder}/backend"
             },
@@ -49,7 +49,7 @@
         {
             "label": "Start Celery Beat",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\Activate.ps1; celery -A app.celery beat -l info",
+            "command": ". .\\venv\\Scripts\\Activate.ps1; celery -A app.celery beat -l info",
             "options": {
                 "cwd": "${workspaceFolder}/backend"
             },
