@@ -1,35 +1,35 @@
 <template>
     <NavBar />
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Register</h2>
+        <h2 class="text-center mb-4">create new account</h2>
         <div class="home-form bg-neutral p-4 rounded shadow">
             <form @submit.prevent="register">
                 <div class="form-group mb-3">
-                    <label for="name">Full Name</label>
-                    <input type="text" v-model="name" class="bg-light form-control" id="name" placeholder="Enter name"
+                    <label for="name">complete name</label>
+                    <input type="text" v-model="name" class="bg-light form-control" id="name" placeholder="type full name"
                         required>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="username">Username</label>
+                    <label for="username">unique identifier</label>
                     <input type="text" v-model="username" class="bg-light form-control" id="username"
-                        placeholder="Enter username" required>
+                        placeholder="choose username" required>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="email">Email</label>
+                    <label for="email">email address</label>
                     <input type="email" v-model="email" class="bg-light form-control" id="email"
-                        placeholder="Enter email" required>
+                        placeholder="provide email" required>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="password">Password</label>
+                    <label for="password">security key</label>
                     <input type="password" v-model="password" class="bg-light form-control" id="password"
-                        placeholder="Enter password" required>
+                        placeholder="create password" required>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="confirmPassword">Confirm Password</label>
+                    <label for="confirmPassword">verify key</label>
                     <input type="password" v-model="confirmPassword" class="bg-light form-control" id="confirmPassword"
-                        placeholder="Confirm password" required>
+                        placeholder="reenter password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-success">submit details</button>
             </form>
         </div>
     </div>

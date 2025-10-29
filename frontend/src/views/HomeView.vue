@@ -1,57 +1,48 @@
 <template>
   <NavBar />
   <div class="home-modern">
-    <!-- Hero Section with Indian Theme -->
+    <!-- Hero Section -->
     <section class="hero-gradient">
       <div class="hero-overlay">
-        <div class="container-modern hero-content">
-          <div class="hero-text fade-in-up">
-            <h1 class="hero-title">
-              <span class="">Find Your Perfect</span><br />
-              Parking Space
-            </h1>
-            <p class="hero-subtitle">
-              <i class="bi bi-geo-alt-fill"></i>
-              Book parking spots across Mumbai, Delhi, Bangalore, and more
-            </p>
-            <div class="hero-stats">
-              <div class="stat-item">
-                <span class="stat-number">{{ locations.length }}+</span>
-                <span class="stat-label">Locations</span>
+        <div class="container">
+          <div class="row align-items-center justify-content-center text-center">
+            <div class="col-lg-10">
+              <div class="hero-content animate-fade-in">
+                <h1 class="hero-title mb-4">
+                  Find Your Perfect Parking Space
+                </h1>
+                <p class="hero-subtitle mb-5">
+                  <i class="bi bi-geo-alt-fill me-2"></i>
+                  Book parking spots in advance across major cities
+                </p>
+                
+                <div class="hero-stats d-flex gap-4 mb-5 justify-content-center flex-wrap">
+                  <div class="stat-item">
+                    <h3 class="stat-number">{{ locations.length }}+</h3>
+                    <p class="stat-label">Cities</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3 class="stat-number">500+</h3>
+                    <p class="stat-label">Parking Spots</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3 class="stat-number">₹15-80</h3>
+                    <p class="stat-label">Per Hour</p>
+                  </div>
+                </div>
+
+                <div class="hero-actions d-flex gap-3 justify-content-center flex-wrap">
+                  <router-link to="/search" class="btn btn-hero-primary btn-lg">
+                    <i class="bi bi-search me-2"></i>Find Parking
+                  </router-link>
+                  <router-link to="/register" class="btn btn-hero-secondary btn-lg">
+                    <i class="bi bi-person-plus me-2"></i>Sign Up Free
+                  </router-link>
+                </div>
               </div>
-              <div class="stat-divider"></div>
-              <div class="stat-item">
-                <span class="stat-number">500+</span>
-                <span class="stat-label">Parking Spots</span>
-              </div>
-              <div class="stat-divider"></div>
-              <div class="stat-item">
-                <span class="stat-number">₹15-80</span>
-                <span class="stat-label">Per Hour</span>
-              </div>
-            </div>
-            <div class="hero-buttons">
-              <router-link to="/login" class="btn-modern btn-primary btn-lg">
-                <i class="bi bi-box-arrow-in-right"></i>
-                Get Started
-              </router-link>
-              <router-link to="/register" class="btn-modern btn-outline btn-lg">
-                <i class="bi bi-person-plus"></i>
-                Sign Up Free
-              </router-link>
-            </div>
-          </div>
-          <div class="hero-visual fade-in">
-            <div class="parking-illustration">
-              <i class="bi bi-p-square-fill"></i>
             </div>
           </div>
         </div>
-      </div>
-      <div class="hero-wave">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-        </svg>
       </div>
     </section>
 
@@ -60,14 +51,14 @@
       <div class="container-modern">
         <div class="section-header text-center mb-5">
           <h2 class="section-title">
-            <span class="text-gradient">Popular</span> Parking Locations
+            <span class="text-gradient">Featured</span> Parking Areas
           </h2>
-          <p class="section-subtitle">Discover parking across India's major cities</p>
+          <p class="section-subtitle">Explore parking in key metropolitan zones</p>
         </div>
 
         <div v-if="isLoadingLocations" class="text-center py-5">
           <div class="spinner-modern"></div>
-          <p class="text-muted mt-3">Loading locations...</p>
+          <p class="text-muted mt-3">Retrieving areas...</p>
         </div>
 
         <div v-else-if="locations.length" class="grid-modern">
@@ -89,7 +80,7 @@
             </div>
             <div class="location-action">
               <router-link to="/login" class="btn-modern btn-primary btn-sm">
-                Explore <i class="bi bi-arrow-right"></i>
+                View Details <i class="bi bi-arrow-right"></i>
               </router-link>
             </div>
           </div>
@@ -97,19 +88,18 @@
 
         <div v-else class="text-center py-5 text-muted">
           <i class="bi bi-inbox" style="font-size: 3rem;"></i>
-          <p class="mt-3">No locations available at the moment.</p>
+          <p class="mt-3">No areas currently available</p>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
     <section class="features-modern py-5 bg-light">
       <div class="container-modern">
         <div class="section-header text-center mb-5">
           <h2 class="section-title">
             Why Choose <span class="text-gradient">ParkEase</span>?
           </h2>
-          <p class="section-subtitle">Smart parking solutions for modern India</p>
+          <p class="section-subtitle">Intelligent parking for urban drivers</p>
         </div>
 
         <div class="row g-4">
@@ -118,8 +108,8 @@
               <div class="feature-icon-wrapper gradient-primary">
                 <i class="bi bi-lightning-charge-fill"></i>
               </div>
-              <h4 class="feature-title">Instant Booking</h4>
-              <p class="feature-text">Book your spot in seconds with our fast and intuitive platform</p>
+              <h4 class="feature-title">Quick Reservation</h4>
+              <p class="feature-text">Secure your spot instantly using our streamlined interface</p>
             </div>
           </div>
 
@@ -128,8 +118,8 @@
               <div class="feature-icon-wrapper gradient-accent">
                 <i class="bi bi-shield-check"></i>
               </div>
-              <h4 class="feature-title">Secure Payment</h4>
-              <p class="feature-text">Safe and secure transactions with multiple payment options</p>
+              <h4 class="feature-title">Safe Transactions</h4>
+              <p class="feature-text">Protected payments with diverse transaction methods</p>
             </div>
           </div>
 
@@ -138,40 +128,39 @@
               <div class="feature-icon-wrapper gradient-secondary">
                 <i class="bi bi-calendar-check"></i>
               </div>
-              <h4 class="feature-title">24/7 Availability</h4>
-              <p class="feature-text">Find and book parking anytime, anywhere in India</p>
+              <h4 class="feature-title">24/7 Access</h4>
+              <p class="feature-text">Locate and reserve parking whenever needed</p>
             </div>
           </div>
 
           <div class="col-md-6 col-lg-3">
             <div class="feature-card-modern card-modern text-center">
-              <div class="feature-icon-wrapper" style="background: linear-gradient(135deg, #00B894 0%, #55EFC4 100%)">
+              <div class="feature-icon-wrapper" style="background: linear-gradient(120deg, #27ae60 0%, #58d68d 100%)">
                 <i class="bi bi-wallet2"></i>
               </div>
-              <h4 class="feature-title">Best Prices</h4>
-              <p class="feature-text">Transparent pricing starting from just ₹15/hour</p>
+              <h4 class="feature-title">Competitive Rates</h4>
+              <p class="feature-text">Clear pricing beginning at only ₹15 per hour</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how-it-works py-5">
       <div class="container-modern">
         <div class="section-header text-center mb-5">
           <h2 class="section-title">
-            How It <span class="text-gradient">Works</span>
+            Our <span class="text-gradient">Process</span>
           </h2>
-          <p class="section-subtitle">Park your vehicle in 3 simple steps</p>
+          <p class="section-subtitle">Secure your spot in three simple steps</p>
         </div>
 
         <div class="steps-container">
           <div class="step-item">
             <div class="step-number gradient-primary">1</div>
             <div class="step-content">
-              <h4>Search Location</h4>
-              <p>Find parking spots near your destination</p>
+              <h4>Find Area</h4>
+              <p>Locate spaces near your destination</p>
             </div>
           </div>
 
@@ -180,8 +169,8 @@
           <div class="step-item">
             <div class="step-number gradient-accent">2</div>
             <div class="step-content">
-              <h4>Book Your Spot</h4>
-              <p>Reserve your parking spot in advance</p>
+              <h4>Reserve Space</h4>
+              <p>Confirm your selection ahead of time</p>
             </div>
           </div>
 
@@ -190,22 +179,21 @@
           <div class="step-item">
             <div class="step-number gradient-secondary">3</div>
             <div class="step-content">
-              <h4>Park & Relax</h4>
-              <p>Arrive and park stress-free</p>
+              <h4>Arrive & Park</h4>
+              <p>Reach and use your reserved spot</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section gradient-hero text-white py-5">
       <div class="container-modern text-center">
-        <h2 class="display-5 fw-bold mb-3">Ready to Find Your Parking Spot?</h2>
-        <p class="lead mb-4">Join thousands of happy users across India</p>
+        <h2 class="display-5 fw-bold mb-3">Ready to Secure Your Space?</h2>
+        <p class="lead mb-4">Join satisfied drivers nationwide</p>
         <router-link to="/register" class="btn-modern btn-accent btn-lg">
           <i class="bi bi-rocket-takeoff"></i>
-          Start Parking Smart
+          Park Smarter Today
         </router-link>
       </div>
     </section>
@@ -262,139 +250,123 @@ export default {
 </script>
 
 <style scoped>
-/* Hero Section */
 .hero-gradient {
   position: relative;
-  min-height: 90vh;
-  background: linear-gradient(135deg, #004E89 0%, #1A6FB0 25%, #FF6B35 75%, #FFB627 100%);
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(135deg, #2980b9 0%, #27ae60 50%, #e67e22 100%);
   overflow: hidden;
 }
 
 .hero-overlay {
-  background: rgba(0, 0, 0, 0.3);
-  min-height: 90vh;
+  background: rgba(0, 0, 0, 0.15);
+  min-height: calc(100vh - 60px);
   display: flex;
   align-items: center;
-  padding: 2rem 0;
-}
-
-.hero-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
+  padding: 4rem 0;
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
   color: white;
+  line-height: 1.2;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1.5rem;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.98);
+  font-weight: 400;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .hero-stats {
   display: flex;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
+  gap: 3rem;
+  padding: 2rem 0;
 }
 
 .stat-item {
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 140px;
 }
 
 .stat-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent-color);
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .stat-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1rem;
+  margin: 0.5rem 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
 }
 
-.stat-divider {
-  width: 2px;
-  background: rgba(255, 255, 255, 0.3);
+.btn-hero-primary {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+.btn-hero-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  color: var(--primary-color);
+  background: #f8f9fa;
 }
 
-.btn-lg {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-}
-
-.hero-visual {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.parking-illustration {
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 255, 255, 0.1);
+.btn-hero-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 2px solid white;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 50px;
   backdrop-filter: blur(10px);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  animation: float 3s ease-in-out infinite;
+  transition: all 0.3s ease;
 }
 
-.parking-illustration i {
-  font-size: 10rem;
-  color: var(--accent-color);
+.btn-hero-secondary:hover {
+  background: white;
+  color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes float {
-  0%, 100% {
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(-20px);
-  }
 }
 
-.hero-wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.hero-wave svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 80px;
-}
-
-.hero-wave path {
-  fill: var(--background-primary);
-}
-
-/* Location Cards */
 .location-card-modern {
   padding: 1.5rem;
   display: flex;
@@ -405,7 +377,7 @@ export default {
 .location-icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  background: linear-gradient(120deg, var(--primary-color), var(--primary-dark));
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -429,34 +401,43 @@ export default {
   gap: 0.5rem;
 }
 
-/* Feature Cards */
+.location-info {
+  flex: 1;
+}
+
 .feature-card-modern {
-  padding: 2rem 1.5rem;
+  padding: 2.5rem 2rem;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .feature-icon-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 85px;
+  height: 85px;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
   color: white;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
 }
 
 .feature-title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   color: var(--text-primary);
+  text-align: center;
 }
 
 .feature-text {
   color: var(--text-secondary);
   margin: 0;
+  text-align: center;
+  line-height: 1.6;
 }
 
 /* How It Works */

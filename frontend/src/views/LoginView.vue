@@ -1,20 +1,20 @@
 <template>
     <NavBar />
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Login</h2>
+        <h2 class="text-center mb-4">access your account</h2>
         <div class="home-form bg-neutral p-4 rounded shadow">
             <form @submit.prevent="login">
                 <div class="form-group mb-3">
-                    <label for="username">Username</label>
+                    <label for="username">user identity</label>
                     <input type="text" v-model="username" class="bg-light form-control" id="username"
-                        placeholder="Enter Username" required>
+                        placeholder="type your username" required>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="password">Password</label>
+                    <label for="password">security key</label>
                     <input type="password" v-model="password" class="bg-light form-control" id="password"
-                        placeholder="Enter password" required>
+                        placeholder="enter your key" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-success">proceed</button>
             </form>
         </div>
     </div>

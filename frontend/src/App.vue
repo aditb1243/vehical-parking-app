@@ -9,28 +9,27 @@ body,
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  /* 🚫 Prevent horizontal scroll */
   width: 100%;
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #34495e;
 }
 
 nav {
-  padding: 30px;
+  padding: 25px;
 }
 
 nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: 600;
+  color: #34495e;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #27ae60;
 }
 </style>
